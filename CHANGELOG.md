@@ -4,6 +4,12 @@ Registro de versiones de ListGenerator. La versión se muestra en el header de l
 
 Convención: empezamos en **0.1**; el decimal sube de 1 en 1 con cada tanda de cambios (0.1 → 0.2 → 0.3 … → 0.10 → 0.11 …), sin saltar nunca a 1.0 hasta que se decida explícitamente.
 
+## 0.63 — 2026-10-16
+
+- Regla especial "Primer Fuego" renombrada a "Primer Disparo" en español (Pike & Shotte: Suecos/Alemanes, Mosquetes Destacados, Partida de Asalto...).
+- Francia: Mosqueteros Comandados ahora también pueden ser Pequeña (−8), además de Grande (+8, máx. 1).
+- Nota: Grande/Pequeña para Piqueros y Mosqueteros Franceses, Tercios Españoles y Mosqueteros Veteranos Españoles ya estaban en la 0.62; en local hay que regenerar el catálogo (`npm run build:static` en `backend/`) para verlos.
+
 ## 0.62 — 2026-10-16
 
 - Pike & Shotte (todas las facciones): las opciones Grande/Pequeña ahora también cambian los atributos, según el reglamento ("Unit Size"): Grande = +1 Disparo (solo si tiene armas a distancia), +2 Cuerpo a Cuerpo, +1 Aguante; Pequeña = -1 / -2 / -1. Antes solo cambiaban los puntos. Se calcula automáticamente a partir del perfil de cada unidad (`applySizeStats` en `thirtyYearsWar.ts`).

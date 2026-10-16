@@ -407,7 +407,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 34,
-      options: [OPT_LARGE_COMMANDED],
+      options: [OPT_SMALL, OPT_LARGE_COMMANDED],
       constraints: { maxUnitsPerArmy: 2 },
     },
     {
