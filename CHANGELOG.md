@@ -6,6 +6,8 @@ Convención: empezamos en **0.1**; el decimal sube de 1 en 1 con cada tanda de c
 
 ## 0.63 — 2026-10-16
 
+- Nuevo `start.sh` en la raíz: instala dependencias si faltan, regenera el catálogo (`build:static`) y arranca el frontend (`./start.sh`; `./start.sh --data-only` solo regenera los datos).
+
 - Regla especial "Primer Fuego" renombrada a "Primer Disparo" en español (Pike & Shotte: Suecos/Alemanes, Mosquetes Destacados, Partida de Asalto...).
 - Francia: Mosqueteros Comandados ahora también pueden ser Pequeña (−8), además de Grande (+8, máx. 1).
 - Nota: Grande/Pequeña para Piqueros y Mosqueteros Franceses, Tercios Españoles y Mosqueteros Veteranos Españoles ya estaban en la 0.62; en local hay que regenerar el catálogo (`npm run build:static` en `backend/`) para verlos.
