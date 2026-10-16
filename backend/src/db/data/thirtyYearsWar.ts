@@ -1,4 +1,4 @@
-import { ConflictSeed, UnitStatsSeed } from "../types";
+import { ConflictSeed, FactionSeed, UnitOptionSeed, UnitStatsSeed } from "../types";
 import { frenchFaction, spanishFaction } from "./thirtyYearsWarFrenchSpanish";
 
 // Perfiles de atributos tomados de la tabla "Unit Reference" de Pike & Shotte.
@@ -391,11 +391,46 @@ const STATS: Record<string, UnitStatsSeed> = {
   },
 };
 
+// Tamaño de unidad (reglamento, "Unit Size"): Grande = +1 Disparo (solo si tiene armas a
+// distancia), +2 Cuerpo a Cuerpo, +1 Aguante; Pequeña = -1 / -2 / -1. Se aplica a TODAS las
+// opciones "large"/"small" de la conflicto (Imperial, Sueca, Francesa y Española) calculando
+// los valores efectivos a partir del perfil base de cada unidad, para no tener que repetirlos a
+// mano en cada opcion. Una opcion que ya traiga sus propios stat_overrides no se toca.
+function sizeStatOverrides(stats: UnitStatsSeed, size: "large" | "small"): NonNullable<UnitOptionSeed["stat_overrides"]> {
+  const sign = size === "large" ? 1 : -1;
+  const overrides: NonNullable<UnitOptionSeed["stat_overrides"]> = {};
+  const handToHand = parseInt(stats.hand_to_hand, 10);
+  if (!Number.isNaN(handToHand)) overrides.hand_to_hand = String(Math.max(0, handToHand + 2 * sign));
+  const shooting = parseInt(stats.shooting, 10); // "–" (sin disparo) -> NaN -> no cambia
+  if (!Number.isNaN(shooting)) overrides.shooting = String(Math.max(0, shooting + sign));
+  overrides.stamina = Math.max(1, stats.stamina + sign);
+  return overrides;
+}
+
+function applySizeStats(faction: FactionSeed): FactionSeed {
+  return {
+    ...faction,
+    units: faction.units.map((unit) => ({
+      ...unit,
+      options: unit.options?.map((option) =>
+        (option.code === "large" || option.code === "small") && !option.stat_overrides
+          ? { ...option, stat_overrides: sizeStatOverrides(unit.stats, option.code) }
+          : option
+      ),
+    })),
+  };
+}
+
+function applySizeStatsToAll(factions: FactionSeed[]): FactionSeed[] {
+  return factions.map(applySizeStats);
+}
+
 export const thirtyYearsWar: ConflictSeed = {
   code: "thirty_years_war",
   name_en: "Thirty Years War (1618–1648)",
   name_es: "Guerra de los Treinta Años (1618–1648)",
-  factions: [
+  // applySizeStatsToAll (en vez de .map directo) para que TypeScript siga tipando el literal como FactionSeed[].
+  factions: applySizeStatsToAll([
     {
       code: "imperial",
       name_en: "Imperial Army",
@@ -782,5 +817,5 @@ export const thirtyYearsWar: ConflictSeed = {
     },
     frenchFaction,
     spanishFaction,
-  ],
+  ]),
 };

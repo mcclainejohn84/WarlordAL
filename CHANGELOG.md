@@ -4,6 +4,13 @@ Registro de versiones de ListGenerator. La versión se muestra en el header de l
 
 Convención: empezamos en **0.1**; el decimal sube de 1 en 1 con cada tanda de cambios (0.1 → 0.2 → 0.3 … → 0.10 → 0.11 …), sin saltar nunca a 1.0 hasta que se decida explícitamente.
 
+## 0.62 — 2026-10-16
+
+- Pike & Shotte (todas las facciones): las opciones Grande/Pequeña ahora también cambian los atributos, según el reglamento ("Unit Size"): Grande = +1 Disparo (solo si tiene armas a distancia), +2 Cuerpo a Cuerpo, +1 Aguante; Pequeña = -1 / -2 / -1. Antes solo cambiaban los puntos. Se calcula automáticamente a partir del perfil de cada unidad (`applySizeStats` en `thirtyYearsWar.ts`).
+- Ejército Francés: nuevas opciones por analogía con Imperial/Sajón. Grande (+6) en toda la infantería combinada (Guardia Veterana, Guardia de Piqueros y Mosqueteros, Piqueros y Mosqueteros Franceses) y en Guardia de Piqueros y Piqueros Mercenarios; Élite (4+) +6 (máx. 1) en Piqueros y Mosqueteros Franceses y Piqueros Mercenarios; Alabardas +2 (máx. 1) en Piqueros Mercenarios; Pequeña (-8) en todos los mosqueteros (Guardia, Veteranos, Mercenarios); Grande (+8, máx. 1) en Mosqueteros Comandados; nueva unidad Galloper Gun (21 pts, máx. 1 por battalia).
+- Ejército Español: Grande (+6) en todos los tercios (Élite, Veteranos, Españoles) y en Piqueros Españoles/Mercenarios; Élite (4+) +6 (máx. 1) en Tercios Veteranos, Tercios Españoles y ambos tipos de piqueros; Alabardas +2 (máx. 1) en ambos piqueros; Pequeña (-8) en todos los mosqueteros (Élite, Veteranos, Mercenarios); nueva unidad Galloper Gun (21 pts, máx. 1 por battalia).
+- Imperial y Sueco: se revisaron contra el reglamento y ya tenían todas las opciones del libro (Grande, Pequeña, Élite, Tenaz, Alabardas, Guardia, Escoceses, Petardo, Vida de Wallenstein...).
+
 ## 0.61 — 2026-10-16
 
 - Editor de datos: las opciones de cada unidad pasan a una sola línea compacta (descripción, Δ puntos, máx. por ejército, máx. por battalia, valores propios y borrar) con cabecera común, en vez de un bloque grande por opción.

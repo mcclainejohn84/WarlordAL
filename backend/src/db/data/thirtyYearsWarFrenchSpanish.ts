@@ -1,4 +1,4 @@
-import { CommanderSeed, FactionSeed, UnitStatsSeed } from "../types";
+import { CommanderSeed, FactionSeed, UnitOptionSeed, UnitStatsSeed } from "../types";
 
 // Datos de las tablas de Francia y España (1618-1648) aportadas por el usuario.
 // NOTA: el movimiento (move_range) y el alcance de armas (weapon_range) de estas unidades
@@ -84,6 +84,37 @@ const siegeOrdnance: UnitStatsSeed = {
 // (no viene indicado en la tabla aportada; se aplica el mismo criterio por consistencia
 // con el resto de facciones — a confirmar si el reglamento dice otra cosa para estos ejercitos).
 const ORDNANCE_GROUP = { maxPerBattaliaGroup: { key: "ordnance", max: 2 } };
+
+// Opciones de lista reutilizables (mismos textos y costes que en las listas oficiales Imperial/
+// Sajona/Sueca de Pike & Shotte). Los ejercitos Frances y Español no vienen en el reglamento:
+// sus opciones se han trasladado por analogia con el resto de ejercitos (por ejemplo, TODA la
+// infanteria combinada de las listas Imperial y Sajona puede ser "Grande", asi que tambien la
+// francesa y la española). Los cambios de atributos de Grande/Pequeña se calculan en
+// thirtyYearsWar.ts (applySizeStats), igual para todas las facciones.
+const OPT_LARGE: UnitOptionSeed = { code: "large", description_en: "Large", description_es: "Grande", point_delta: 6 };
+const OPT_LARGE_COMMANDED: UnitOptionSeed = {
+  code: "large",
+  description_en: "Large",
+  description_es: "Grande",
+  point_delta: 8,
+  constraints: { maxUnitsPerArmy: 1 },
+};
+const OPT_SMALL: UnitOptionSeed = { code: "small", description_en: "Small", description_es: "Pequeña", point_delta: -8 };
+const OPT_ELITE_MAX1: UnitOptionSeed = {
+  code: "elite",
+  description_en: "Elite (4+)",
+  description_es: "Élite (4+)",
+  point_delta: 6,
+  constraints: { maxUnitsPerArmy: 1 },
+};
+const OPT_HALBERDS_MAX1: UnitOptionSeed = {
+  code: "halberds",
+  description_en: "Halberds (–Pike & Hedgehog, +Double-handed Weapon)",
+  description_es: "Alabardas (–Pica y Erizo, +Arma a Dos Manos)",
+  point_delta: 2,
+  constraints: { maxUnitsPerArmy: 1 },
+};
+
 
 export const frenchFaction: FactionSeed = {
   code: "french",
@@ -237,6 +268,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 47,
+      options: [OPT_LARGE],
       constraints: { maxUnitsPerArmy: 1 },
     },
     {
@@ -260,6 +292,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 40,
+      options: [OPT_LARGE],
     },
     {
       code: "french_pike_musket",
@@ -282,6 +315,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 38,
+      options: [OPT_LARGE, OPT_ELITE_MAX1],
     },
     {
       code: "pikemen_guard",
@@ -303,6 +337,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 33,
+      options: [OPT_LARGE],
       constraints: { maxUnitsPerArmy: 1 },
     },
     {
@@ -325,6 +360,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 26,
+      options: [OPT_LARGE, OPT_ELITE_MAX1, OPT_HALBERDS_MAX1],
     },
     {
       code: "guard_musketeers",
@@ -347,6 +383,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 38,
+      options: [OPT_SMALL],
       constraints: { maxUnitsPerArmy: 1 },
     },
     {
@@ -370,6 +407,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 34,
+      options: [OPT_LARGE_COMMANDED],
       constraints: { maxUnitsPerArmy: 2 },
     },
     {
@@ -393,6 +431,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 33,
+      options: [OPT_SMALL],
     },
     {
       code: "storming_party",
@@ -442,6 +481,7 @@ export const frenchFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 26,
+      options: [OPT_SMALL],
     },
     {
       code: "swordsmen",
@@ -518,6 +558,16 @@ export const frenchFaction: FactionSeed = {
       stats: siegeOrdnance,
       base_points: 25,
       constraints: ORDNANCE_GROUP,
+    },
+    {
+      // En el reglamento es una mejora de "Light Ordnance" (+4 pts, maximo una por battalia); aqui se
+      // lista como unidad independiente, igual que en Imperial (ver thirtyYearsWar.ts).
+      code: "galloper_gun",
+      name_en: "Galloper Gun",
+      name_es: "Cañón Ligero de Escolta (Galloper Gun)",
+      stats: { ...lightOrdnance, special_rules_en: "Galloper Gun", special_rules_es: "Galloper Gun" },
+      base_points: 21,
+      constraints: { maxPerBattalia: 1, ...ORDNANCE_GROUP },
     },
   ],
 };
@@ -694,6 +744,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 49,
+      options: [OPT_LARGE],
       constraints: { maxUnitsPerArmy: 1 },
     },
     {
@@ -717,6 +768,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 43,
+      options: [OPT_LARGE, OPT_ELITE_MAX1],
     },
     {
       code: "spanish_tercios",
@@ -739,6 +791,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 38,
+      options: [OPT_LARGE, OPT_ELITE_MAX1],
     },
     {
       code: "spanish_pikemen",
@@ -760,6 +813,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 30,
+      options: [OPT_LARGE, OPT_ELITE_MAX1, OPT_HALBERDS_MAX1],
     },
     {
       code: "mercenary_pikemen",
@@ -781,6 +835,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 26,
+      options: [OPT_LARGE, OPT_ELITE_MAX1, OPT_HALBERDS_MAX1],
     },
     {
       code: "elite_musketeers",
@@ -803,6 +858,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 39,
+      options: [OPT_SMALL],
       constraints: { maxUnitsPerArmy: 1 },
     },
     {
@@ -826,6 +882,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 34,
+      options: [OPT_SMALL],
     },
     {
       code: "mercenary_musketeers",
@@ -848,6 +905,7 @@ export const spanishFaction: FactionSeed = {
         move_range: 6,
       },
       base_points: 26,
+      options: [OPT_SMALL],
     },
     {
       code: "swordsmen",
@@ -924,6 +982,16 @@ export const spanishFaction: FactionSeed = {
       stats: siegeOrdnance,
       base_points: 25,
       constraints: { maxUnitsPerArmy: 1, ...ORDNANCE_GROUP },
+    },
+    {
+      // En el reglamento es una mejora de "Light Ordnance" (+4 pts, maximo una por battalia); aqui se
+      // lista como unidad independiente, igual que en Imperial (ver thirtyYearsWar.ts).
+      code: "galloper_gun",
+      name_en: "Galloper Gun",
+      name_es: "Cañón Ligero de Escolta (Galloper Gun)",
+      stats: { ...lightOrdnance, special_rules_en: "Galloper Gun", special_rules_es: "Galloper Gun" },
+      base_points: 21,
+      constraints: { maxPerBattalia: 1, ...ORDNANCE_GROUP },
     },
   ],
 };
